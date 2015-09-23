@@ -10,7 +10,7 @@ The focus would be on the sermon audio file, supplemented with an image of the c
 
 Some questions this exhibition might answer: What are the predominant preaching styles in the Diocese of Maine? Do I like the style and message of the preacher at St. Xyz's? Is the theology consistent throughout the Diocese? How have different preachers interpreted the same scripture reading? Are there observable trends concerning sermon length? What role, if any, might geographical location play in sermon characteristics? How do sermons on feast days (i.e., holidays) compare to weekly sermons? Do certain subjects come up more frequently than others? etc.
 
-Note on fields:
+Note on fields: 
 "Sermon" here is take to encompass homilies, eulogies, and other forms of liturgical address, though they are not precisely the same thing.
 
 "primaryOccasionType" refers to the nature of the event during which the sermon is given: Sunday Eucharist, Youth Sunday, feast day, funeral, Diocesan Convention, etc.
