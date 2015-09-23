@@ -1,0 +1,26 @@
+﻿I made this dataset up; while I can imagine uses for the database, I am not certain it would be valuable, feasible, or even legal to use this particular database as an exhibition. Still, I thought it would be interesting material to work with.
+
+"Preaching of the Word" is an imaginary digital audio exhibition of Episcopal theology and teaching in the Diocese of Maine, as expressed through its liturgy (i.e., worship service) and clergy in the form of preached sermons. The Diocese comprises all the parishes (i.e., churches) of that denomination in the state of Maine. The exhibition and database of sermons could serve as:
+
+- A form of outreach to past, present, and future churchgoers in the Diocese, allowing them audiovisual access to sermons of any parish, and the sermons' respective themes and sources
+- A resource for theological, sociological, and historical research and education
+- A centralized, navigable "data store" of sermon information for use by the Diocese and its parishes.
+
+The focus would be on the sermon audio file, supplemented with an image of the clergy and parish(es) where the sermon was delivered. Venues could be located on an interactive map. In theory the exhibition might link out to individual parish websites, and connect the visitor to the scripture passages (in context) on which the sermons are based. Video could ultimately be included as well. With transcripts, one might have tools to do textual analysis and visualization on selected sermon corpora.
+
+Some questions this exhibition might answer: What are the predominant preaching styles in the Diocese of Maine? Do I like the style and message of the preacher at St. Xyz's? Is the theology consistent throughout the Diocese? How have different preachers interpreted the same scripture reading? Are there observable trends concerning sermon length? What role, if any, might geographical location play in sermon characteristics? How do sermons on feast days (i.e., holidays) compare to weekly sermons? Do certain subjects come up more frequently than others? etc.
+
+Note on fields: 
+"Sermon" here is take to encompass homilies, eulogies, and other forms of liturgical address, though they are not precisely the same thing.
+
+"primaryOccasionType" refers to the nature of the event during which the sermon is given: Sunday Eucharist, Youth Sunday, feast day, funeral, Diocesan Convention, etc.
+
+"preacherRole" refers to the clergyperson's ordained position: priest, deacon, bishop, chaplain, etc.
+
+"scriptureSource" is the reading upon which the sermon is (typically) based.
+
+"venue" tables are broken out and joined because the Episcopal Church recycles parish names and the name of a parish may not be unique. A city may have more than one parish name associated with it (Portland has at least three Episcopal churches), and a parish name may be reused in different cities (St. Andrew's Newcastle, St. Andrew's Millinocket, St. Andrew's Winthrop...). I could have treated the name and city together as a unique identifier, but wanted to preserve the ability to query the database by city.
+
+I considered a field for "liturgicalSeason" (e.g., Advent, Lent...), but one would technically be able to determine the season of the church year by combining other fields.
+
+The "FileLoc" and "Image" fields seem to be getting away from metadata and into actual data, and may not be appropriate for the tables.
