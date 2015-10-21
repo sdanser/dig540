@@ -1,0 +1,106 @@
+// Basic SELECT query
+SELECT * FROM `source`
+
+"0","Numbers 35:33-34",NULL
+"2","Acts 20:7-12",NULL
+"3","John 1:43-46",NULL
+"4","Matthew 13:1-9",NULL
+
+
+// Basic query, cleaned up
+SELECT source.scripture_source AS  'scripture verse' FROM  `source` ORDER BY scripture_source ASC
+
+scripture verse
+Acts 20:7-12
+John 1:43-46
+Matthew 13:1-9
+Numbers 35:33-34
+
+
+// Foreign key to preacher table
+SELECT sermon.id, sermon.title as 'Title', preacher.first_name as 'Clergy first name', preacher.last_name as 'Clergy last name', preacher.role as 'Role' FROM `sermon`,`preacher` WHERE preacher.id = sermon.preacher_id ORDER BY title ASC
+
+"12","As ye sow, so shall ye reap","Jane","Doe","Priest"
+"10","Easter homily","George","Burgess","Bishop"
+"13","Feasting and fasting","George","Burgess","Bishop"
+"15","Fertile ground","Joe","Smith","Deacon"
+"1","Our island home","Alfa","Betts","Priest"
+
+
+// Foreign keys to preacher and occasion tables
+SELECT ocassion.date, sermon.title, preacher.last_name as 'preacher', occasion.primary_occasion as 'occasion' FROM `sermon`,`preacher`, `occasion` WHERE preacher.id = sermon.preacher_id AND occasion.id = sermon.occasion_id ORDER BY date DESC
+
+"2015-07-11","Our island home","Betts","Funeral"
+"2013-12-15","Feasting and fasting","Burgess","Advent 3"
+"2011-04-10","Easter homily","Burgess","Easter Vigil"
+"2004-08-22","As ye sow, so shall ye reap","Doe","Sunday Rite I"
+"2004-08-22","Fertile ground","Smith","Sunday Rite I"
+
+
+
+// Foreign keys to all tables except subject (linking table)
+SELECT venue.name, venue.city, preacher.last_name as 'preacher', preacher.role, sermon.title, sermon.audio_length as 'minutes', source.scripture_source as 'scripture', occasion.date FROM `venue`, `preacher`, `sermon`, `source`, `occasion` WHERE venue.id = sermon.venue_id AND preacher.id = sermon.preacher_id AND source.id = sermon.source_id AND occasion.id = sermon.occasion_id ORDER BY city ASC
+
+"St. John's","Bangor","Burgess","Bishop","Easter homily","08:05","Acts 20:7-12","2011-04-10"
+"Church of Our Father","Hull's Cove","Burgess","Bishop","Feasting and fasting","12:58","John 1:43-46","2013-12-15"
+"St. Ann's","Kennebunkport","Smith","Deacon","Fertile ground","14:39","Matthew 13:1-9","2004-08-22"
+"St. Luke's","Wilton","Betts","Priest","Our island home","15:20","Numbers 35:33-34","2015-07-11"
+"St. Ann's","Windham","Doe","Priest","As ye sow, so shall ye reap","17:01","Matthew 13:1-9","2004-08-22"
+
+
+
+// First attempt with sermon_subject linking table
+SELECT source.scripture_source as 'source', subject.subject_term as 'subject', occasion.primary_occasion as 'occasion' FROM `source`,`subject`, `occasion`, `sermon`, `sermon_subject` WHERE source.id = sermon.source_id AND occasion.id = sermon.occasion_id and subject.id = sermon_subject.subject_id AND sermon.id = sermon_subject.sermon_id ORDER BY scripture_source ASC
+
+"Acts 20:7-12","Resurrection","Easter Vigil"
+"Acts 20:7-12","Paul","Easter Vigil"
+"Matthew 13:1-9","Seed","Sunday Rite I"
+"Matthew 13:1-9","Parable","Sunday Rite I"
+"Numbers 35:33-34","Pollution","Funeral"
+"Numbers 35:33-34","Land","Funeral"
+"Numbers 35:33-34","Bloodshed","Funeral"
+"Numbers 35:33-34","Israelites","Funeral"
+"Numbers 35:33-34","Lord","Funeral"
+
+
+// Questions to answer:
+// 1. At which churches were the sermons about Jesus Christ, and how long were they?
+SELECT venue.name, venue.city, sermon.audio_length as'length', subject.subject_term as 'subject' FROM `venue`, `sermon`, `subject`, `sermon_subject` WHERE venue.id = sermon.venue_id AND subject.id = sermon_subject.subject_id and sermon.id = sermon_subject.sermon_id AND subject_term = 'Jesus Christ' ORDER BY audio_length
+
+"Church of Our Father","Hull's Cove","12:58","Jesus Christ"
+"St. Ann's","Windham","17:01","Jesus Christ"
+
+
+
+// 2. I heard a sermon at a church named for a saint that started with 'A'. I'd know the title of the sermon if I saw it. Where are the St. 'A' churches and what sermons were given there?
+SELECT venue.name, venue.city, sermon.title FROM `venue`, `sermon` WHERE venue.id = sermon.venue_id AND name LIKE 'St. A%'
+
+"St. Ann's","Windham","As ye sow, so shall ye reap"
+"St. Ann's","Kennebunkport","Fertile ground"
+
+
+
+// 3. What sermons have been given by just priests or deacons?
+// (Figured out that I have to repeat the relationship between the tables for the OR statement.
+// Interesting insight into SQL sentence structure.)
+SELECT sermon.title, preacher.role FROM `sermon`, `preacher` WHERE preacher.id = sermon.preacher_id and role = 'Priest' OR preacher.id = sermon.preacher_id AND role = 'Deacon'
+
+"Our island home","Priest"
+"Fertile ground","Deacon"
+"As ye sow, so shall ye reap","Priest"
+
+
+
+// 4. At which churches are the sermons shorter than 15 minutes long?
+SELECT venue.name, venue.city, sermon.audio_length AS 'minutes' FROM `venue`, `sermon` WHERE venue.id = sermon.venue_id AND audio_length BETWEEN '00:00' AND '14.59'
+
+"St. John's","Bangor","08:05"
+"Church of Our Father","Hull's Cove","12:58"
+"St. Ann's","Kennebunkport","14:39"
+
+
+
+// 5. Where and on what occasion was a sermon given about pollution?
+SELECT occasion.primary_occasion as 'occasion', occasion.date, venue.name, venue.city, subject.subject_term as 'subject' FROM `occasion`, `venue`,`subject`, `sermon`, `sermon_subject` WHERE occasion.id = sermon.occasion_id AND venue.id = sermon.venue_id AND subject.id = sermon_subject.subject_id AND sermon.id = sermon_subject.sermon_id AND subject_term LIKE 'Pollut%' ORDER by city ASC
+
+"Funeral","2015-07-11","St. Luke's","Wilton","Pollution"
