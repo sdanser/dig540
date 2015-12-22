@@ -28,8 +28,8 @@
 					$n++;
 					}
 				}
-
 			?>
+
 			<br/><br/>
 				<li><b>Unicorn Pencil Sharpener</b><br/>
 				<img src="http://ecx.images-amazon.com/images/I/71eKgzHs8dL._SY355_.jpg"/>
@@ -57,8 +57,5 @@
 		</ol>
 		<br/><br/>*These items are available on Amazon.com. Prices subject to change.<br/>
 		This page should not be considered an endorsement of Amazon or the products listed.
-
-
 		</body>
-
 </html>
